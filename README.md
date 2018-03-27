@@ -1,15 +1,31 @@
-Composer Library Template
-=========================
+Search Query Composer
+=====================
 
-If you are trying to create a new PHP Composer library, whether it will be going to submitted to packagist.org or just in your Github account, this template of files will surely help you make the process a lot easier and faster.
+This library is intended for use in cases, where you want to extend the search abilities of simple search input. It takes the input from user, and tries to interpret them as an expression.
+For example, user enters something like **a AND NOT (b OR c)** and this library will tokenize this input and construct the valid SQL statement fragment like
+```sql
+`field` LIKE '%a%'
+AND NOT(
+  `field` LIKE '%b%'
+  OR
+  `field` LIKE '%c%'
+)
+```
 
 Features
 --------
 
 * PSR-4 autoloading compliant structure
-* Unit-Testing with PHPUnit
-* Comprehensive Guides and tutorial
-* Easy to use to any framework or even a plain php file
+* Supports operators AND, OR, NOT
+* Supports subquery nesting
+* Easy to use
 
+Use
+---
 
-I encourage that you put more information on this readme file instead of leaving it as is. See [http://www.darwinbiler.com/designing-and-making-the-readme-file-for-your-github-repository/](How to make a README file) for more info.
+Basic usage is very simple:
+
+```php
+$userInput = 'a AND NOT (b OR c)';
+echo RisoToth\Database\SearchQuery::tokenizeAndCompose($userInput, '`field`');
+```
