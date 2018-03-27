@@ -18,17 +18,43 @@ class SearchQuery {
   const T_OPERAND = 1;
   const T_SUBQUERY = 2;
 
+  /**
+   * Composes the SQL statement fragment from user entry and datasource definition.
+   *
+   * @param string $searchQuery User entry
+   * @param string $dataSource Field name (datasource) or expression with placeholder
+   * @param type $placeholder (optional) Placeholder used in the expression
+   * @return string
+   */
   public static function tokenizeAndCompose($searchQuery, $dataSource, $placeholder = null) {
     $tokenList = self::tokenize($searchQuery);
-    if (empty($tokenList)) return '';
-
     return self::compose($tokenList, $dataSource, $placeholder);
   }
 
+  /**
+   * Composes the SQL statement fragment from token list and datasource definition.
+   *
+   * @param array $tokenList Token list
+   * @param string $dataSource Field name (datasource) or expression with placeholder
+   * @param type $placeholder (optional) Placeholder used in the expression
+   * @return string
+   */
   public static function compose($tokenList, $dataSource, $placeholder = null) {
+    if (empty($tokenList)) return '';
 
+    $result = '';
+
+
+
+    return $result;
   }
 
+  /**
+   * Tokenizes the input string into array of tokens.
+   *
+   * @param string $searchQuery
+   * @return array
+   */
   public static function tokenize($searchQuery) {
     $resultTokens = [];
     $valueStack = '';
@@ -67,7 +93,6 @@ class SearchQuery {
       // get char and shorten input stack
       $char = mb_substr($searchQueryTmp, 0, 1);
       $searchQueryTmp = mb_substr($searchQueryTmp, 1);
-//      echo "&gt; CH:$char, S:$state, L:$subqueryLevel</br>";
 
       // <editor-fold defaultstate="collapsed" desc="state machine">
       if ($currentMachineState == self::STATE_VALUE && $char == '"') { // exact value start
@@ -126,6 +151,13 @@ class SearchQuery {
     return $resultTokens;
   }
 
+  /**
+   * Adds token to token list.
+   *
+   * @param array $tokens
+   * @param int $type
+   * @param string|array $value
+   */
   private static function addToken(&$tokens, $type, $value) {
     if ((is_string($value) && trim($value) !== '') || (is_array($value) && !empty($value))) {
       $tokens[] = [
@@ -135,6 +167,11 @@ class SearchQuery {
     }
   }
 
+  /**
+   * Returns operands matching regular expression.
+   *
+   * @return string
+   */
   private static function getOperandsMatchingRE() {
     return '/^\s(' . implode('|', array_map('preg_quote', self::OPERANDS)) . ')\s/';
   }

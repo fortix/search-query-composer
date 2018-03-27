@@ -2,7 +2,7 @@
     "name": "risototh/search-query-composer",
     "description": "Tokenizer and composer for search query from user input.",
     "keywords": ["database", "sql", "search", "php"],
-    "license": "BSD",
+    "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Richard Toth",
