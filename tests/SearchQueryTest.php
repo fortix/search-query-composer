@@ -39,7 +39,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
         ['type' => 0, 'value' => 'y'],
       ]],
     ];
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
     unset($var1);
     unset($var2);
   }
@@ -49,7 +49,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     $var2 = [
       ['type' => 0, 'value' => 'something or something else and also this or not ?'],
     ];
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
     unset($var1);
     unset($var2);
   }
@@ -106,7 +106,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
       ]],
     ];
 
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
     unset($src);
     unset($var1);
     unset($var2);
@@ -120,7 +120,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     $var1 = SearchQuery::filter($src);
     $var2 = [];
 
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
     unset($src);
     unset($var1);
     unset($var2);
@@ -149,7 +149,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
       ]],
     ];
 
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
     unset($src);
     unset($var1);
     unset($var2);
@@ -165,28 +165,28 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
       ['type' => 0, 'value' => 'x'],
     ];
 
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
     unset($src);
     unset($var1);
     unset($var2);
   }
 
   public function testFilter5() {
-    $this->assertTrue(SearchQuery::filter([]) === []);
+    $this->assertEquals(SearchQuery::filter([]), []);
   }
 
   public function testComposePart1() {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::composePart('test\'"\xa0 something', $pdo, '`field`');
     $var2 = '`field` LIKE \'%test\'\'"\xa0 something%\'';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testComposePart2() {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::composePart('test\'"\xa0 something', $pdo, '`field` LIKE "%^FLT%"', '^FLT');
     $var2 = '`field` LIKE "%%test\'\'"\xa0 something%%"';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testCompose1() {
@@ -215,7 +215,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     ];
     $var1 = SearchQuery::compose($src, $pdo, '`field`');
     $var2 = ' NOT `field` LIKE \'%a%\' AND NOT (`field` LIKE \'%b%\' OR (`field` LIKE \'%c%\' AND `field` LIKE \'%d AND e%\')) AND (`field` LIKE \'%x%\' OR `field` LIKE \'%y%\' AND NOT `field` LIKE \'%y%\')';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testCompose2() {
@@ -244,21 +244,21 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     ];
     $var1 = SearchQuery::compose($src, $pdo, '`field` LIKE "%^FLT%"', '^FLT');
     $var2 = ' NOT `field` LIKE "%%a%%" AND NOT (`field` LIKE "%%b%%" OR (`field` LIKE "%%c%%" AND `field` LIKE "%%d AND e%%")) AND (`field` LIKE "%%x%%" OR `field` LIKE "%%y%%" AND NOT `field` LIKE "%%y%%")';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testMake1() {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::make('a AND NOT (b OR (c AND "d AND e")) AND (x OR y)', $pdo, '`field`');
     $var2 = '`field` LIKE \'%a%\' AND NOT (`field` LIKE \'%b%\' OR (`field` LIKE \'%c%\' AND `field` LIKE \'%d AND e%\')) AND (`field` LIKE \'%x%\' OR `field` LIKE \'%y%\')';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testMake2() {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::make('a AND NOT (b OR (c AND "d AND e")) AND (x OR y)', $pdo, '`field` LIKE "%^FLT%"', '^FLT');
     $var2 = '`field` LIKE "%^FLT%" LIKE \'%a%\' AND NOT (`field` LIKE "%^FLT%" LIKE \'%b%\' OR (`field` LIKE "%^FLT%" LIKE \'%c%\' AND `field` LIKE "%^FLT%" LIKE \'%d AND e%\')) AND (`field` LIKE "%^FLT%" LIKE \'%x%\' OR `field` LIKE "%^FLT%" LIKE \'%y%\')';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testReconstruct1() {
@@ -286,7 +286,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     ];
     $var1 = SearchQuery::reconstruct($src);
     $var2 = 'NOT a AND NOT (b OR (c AND "d AND e")) AND (x OR y AND NOT y)';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testReconstruct2() {
@@ -295,14 +295,14 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     ];
     $var1 = SearchQuery::reconstruct($src);
     $var2 = 'a';
-    $this->assertTrue($var1 === $var2);
+    $this->assertEquals($var1, $var2);
   }
 
   public function testForwardBackward() {
     $src = 'NOT a AND NOT (b OR (c AND "d AND e")) AND (x OR y AND NOT y)';
     $tokens = SearchQuery::tokenize($src);
     $result = SearchQuery::reconstruct($tokens);
-    $this->assertTrue($src === $result);
+    $this->assertEquals($src, $result);
   }
 
   /**
