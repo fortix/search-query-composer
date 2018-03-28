@@ -155,7 +155,7 @@ class SearchQuery {
     $currentMachineState = self::STATE_VALUE;
     $subqueryLevelCounter = 0;
 
-    $searchQueryTmp = ' ' . trim((string)$searchQuery); // prepend with space to match even the first operator
+    $searchQueryTmp = ' ' . trim((string)$searchQuery) . ' '; // prepend/append with space to match even the first/last operator
     while (mb_strlen($searchQueryTmp)) {
       // <editor-fold defaultstate="collapsed" desc="operator matching">
       if ($currentMachineState == self::STATE_VALUE) {
