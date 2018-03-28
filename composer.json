@@ -1,24 +1,24 @@
 {
-    "name": "risototh/search-query-composer",
-    "description": "Tokenizer and composer for search query from user input.",
-    "keywords": ["database", "sql", "search", "php"],
-    "license": "BSD-3-Clause",
-    "authors": [
-        {
-            "name": "Richard Toth",
-            "email": "riso@iklub.sk"
-        }
-    ],
-    "type": "library",
-    "require": {
-		"php": ">=5.4"
-    },
-	"require-dev": {
-		"phpunit/phpunit": "5.2.*"
-    },
-	"autoload": {
-        "psr-4": {
-            "Risototh\\Database\\": "src/"
-        }
+  "name": "risototh/search-query-composer",
+  "description": "Tokenizer and composer for search query from user input.",
+  "keywords": ["database", "sql", "search", "php"],
+  "license": "BSD-3-Clause",
+  "authors": [
+    {
+      "name": "Richard Toth",
+      "email": "riso@iklub.sk"
     }
+  ],
+  "type": "library",
+  "require": {
+    "php": ">=5.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "5.2.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Risototh\\Database\\": "src/"
+    }
+  }
 }

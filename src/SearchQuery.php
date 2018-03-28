@@ -1,6 +1,6 @@
 <?php
 
-namespace RisoToth\Database;
+namespace Risototh\Database;
 
 /**
 *  Class implementing tokenizer and composer of search query from user input.
