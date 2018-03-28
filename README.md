@@ -27,5 +27,6 @@ Basic usage is very simple:
 
 ```php
 $userInput = 'a AND NOT (b OR c)';
-echo RisoToth\Database\SearchQuery::tokenizeAndCompose($userInput, '`field`');
+$pdo = new \PDO('your pdo connection');
+echo RisoToth\Database\SearchQuery::make($userInput, $pdo, '`field`');
 ```
