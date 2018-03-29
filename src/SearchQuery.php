@@ -23,14 +23,15 @@ class SearchQuery {
    * Composes the SQL statement fragment from user entry and datasource definition.
    *
    * @param string $searchQuery User entry
+   * @param \PDO $pdo PDO connection to be used for value escaping
    * @param string $dataSource Field name (datasource) or expression with placeholder
    * @param type $placeholder (optional) Placeholder used in the expression
    * @return string
    */
-  public static function make($searchQuery, $dataSource, $placeholder = null) {
+  public static function make($searchQuery, \PDO $pdo, $dataSource, $placeholder = null) {
     $tokenList = self::tokenize($searchQuery);
     $tokenListFiltered = self::filter($tokenList);
-    return self::compose($tokenListFiltered, $dataSource, $placeholder);
+    return self::compose($tokenListFiltered, $pdo, $dataSource, $placeholder);
   }
 
   /**

@@ -257,7 +257,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
   public function testMake2() {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::make('a AND NOT (b OR (c AND "d AND e")) AND (x OR y)', $pdo, '`field` LIKE "%^FLT%"', '^FLT');
-    $var2 = '`field` LIKE "%^FLT%" LIKE \'%a%\' AND NOT (`field` LIKE "%^FLT%" LIKE \'%b%\' OR (`field` LIKE "%^FLT%" LIKE \'%c%\' AND `field` LIKE "%^FLT%" LIKE \'%d AND e%\')) AND (`field` LIKE "%^FLT%" LIKE \'%x%\' OR `field` LIKE "%^FLT%" LIKE \'%y%\')';
+    $var2 = '`field` LIKE "%%a%%" AND NOT (`field` LIKE "%%b%%" OR (`field` LIKE "%%c%%" AND `field` LIKE "%%d AND e%%")) AND (`field` LIKE "%%x%%" OR `field` LIKE "%%y%%")';
     $this->assertEquals($var1, $var2);
   }
 
