@@ -29,9 +29,9 @@ class SearchQuery {
    * @return string
    */
   public static function make($searchQuery, \PDO $pdo, $dataSource, $placeholder = null) {
-    $tokenList = self::tokenize($searchQuery);
-    $tokenListFiltered = self::filter($tokenList);
-    return self::compose($tokenListFiltered, $pdo, $dataSource, $placeholder);
+    $tokenList = static::tokenize($searchQuery);
+    $tokenListFiltered = static::filter($tokenList);
+    return static::compose($tokenListFiltered, $pdo, $dataSource, $placeholder);
   }
 
   /**
@@ -52,13 +52,13 @@ class SearchQuery {
       switch ($token['type']) {
         case self::T_EXACT_VALUE:
         case self::T_VALUE:
-          $result .= self::composePart($token['value'], $pdo, $dataSource, $placeholder);
+          $result .= static::composePart($token['value'], $pdo, $dataSource, $placeholder);
           break;
         case self::T_OPERATOR:
           $result .= ' ' . $token['value'] . ' ';
           break;
         case self::T_SUBQUERY:
-          $result .= '(' . self::compose($token['value'], $pdo, $dataSource, $placeholder) . ')';
+          $result .= '(' . static::compose($token['value'], $pdo, $dataSource, $placeholder) . ')';
           break;
       }
     }
@@ -107,7 +107,7 @@ class SearchQuery {
     if ($tokenList[0]['type'] == self::T_SUBQUERY) {
       $resultList[] = [
         'type' => self::T_SUBQUERY,
-        'value' => self::filter($tokenList[0]['value'])
+        'value' => static::filter($tokenList[0]['value'])
         ];
     }
     else {
@@ -128,7 +128,7 @@ class SearchQuery {
         if ($tokenList[$i]['type'] == self::T_SUBQUERY) {
           $resultList[] = [
             'type' => self::T_SUBQUERY,
-            'value' => self::filter($tokenList[$i]['value'])
+            'value' => static::filter($tokenList[$i]['value'])
             ];
         }
         else {
@@ -273,7 +273,7 @@ class SearchQuery {
           $result .= ' ' . $token['value'] . ' ';
           break;
         case self::T_SUBQUERY:
-          $result .= '(' . self::reconstruct($token['value']) . ')';
+          $result .= '(' . static::reconstruct($token['value']) . ')';
           break;
       }
     }
