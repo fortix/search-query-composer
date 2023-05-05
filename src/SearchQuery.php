@@ -25,10 +25,10 @@ class SearchQuery {
    * @param string $searchQuery User entry
    * @param \PDO $pdo PDO connection to be used for value escaping
    * @param string $dataSource Field name (datasource) or expression with placeholder
-   * @param type $placeholder (optional) Placeholder used in the expression
+   * @param string|null $placeholder (optional) Placeholder used in the expression
    * @return string
    */
-  public static function make($searchQuery, \PDO $pdo, $dataSource, $placeholder = null) {
+  public static function make(string $searchQuery, \PDO $pdo, string $dataSource, ?string $placeholder = null): string {
     $tokenList = static::tokenize($searchQuery);
     $tokenListFiltered = static::filter($tokenList);
     return static::compose($tokenListFiltered, $pdo, $dataSource, $placeholder);
@@ -40,10 +40,10 @@ class SearchQuery {
    * @param array $tokenList Token list
    * @param \PDO $pdo PDO connection to be used for value escaping
    * @param string $dataSource Field name (datasource) or expression with placeholder
-   * @param type $placeholder (optional) Placeholder used in the expression
+   * @param string|null $placeholder (optional) Placeholder used in the expression
    * @return string
    */
-  public static function compose($tokenList, \PDO $pdo, $dataSource, $placeholder = null) {
+  public static function compose(array $tokenList, \PDO $pdo, string $dataSource, ?string $placeholder = null): string {
     if (empty($tokenList)) return '';
 
     $result = '';
@@ -72,10 +72,10 @@ class SearchQuery {
    * @param string $value
    * @param \PDO $pdo PDO connection to be used for value escaping
    * @param string $dataSource Field name (datasource) or expression with placeholder
-   * @param type $placeholder (optional) Placeholder used in the expression
+   * @param string|null $placeholder (optional) Placeholder used in the expression
    * @return string
    */
-  public static function composePart($value, \PDO $pdo, $dataSource, $placeholder = null) {
+  public static function composePart(string $value, \PDO $pdo, string $dataSource, ?string $placeholder = null): string {
     $valueQuoted = $pdo->quote('%' . $value . '%');
 
     if ($placeholder === null) {
@@ -93,7 +93,7 @@ class SearchQuery {
    * @param array $tokenList
    * @return array
    */
-  public static function filter($tokenList) {
+  public static function filter(array $tokenList): array {
     if (empty($tokenList)) return [];
 
     $resultList = [];
@@ -150,7 +150,7 @@ class SearchQuery {
    * @param string $searchQuery
    * @return array
    */
-  public static function tokenize($searchQuery) {
+  public static function tokenize(string $searchQuery): array {
     $resultTokens = [];
     $valueStack = '';
     $currentMachineState = self::STATE_VALUE;
@@ -256,7 +256,7 @@ class SearchQuery {
    * @param array $tokenList
    * @return string
    */
-  public static function reconstruct($tokenList) {
+  public static function reconstruct(array $tokenList): string {
     if (empty($tokenList)) return '';
 
     $result = '';
@@ -288,7 +288,7 @@ class SearchQuery {
    * @param int $type
    * @param string|array $value
    */
-  private static function addToken(&$tokens, $type, $value) {
+  private static function addToken(array &$tokens, int $type, string|array $value): void {
     if ((is_string($value) && trim($value) !== '') || (is_array($value) && !empty($value))) {
       $tokens[] = [
         'type' => $type,
@@ -302,7 +302,7 @@ class SearchQuery {
    *
    * @return string
    */
-  private static function getOperatorsMatchingRE() {
+  private static function getOperatorsMatchingRE(): string {
     return '/^\s(' . implode('|', array_map('preg_quote', self::OPERATORS)) . ')\s/';
   }
 }

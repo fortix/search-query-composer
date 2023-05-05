@@ -1,24 +1,25 @@
 <?php
 
 use Risototh\Database\SearchQuery;
+use PHPUnit\Framework\TestCase;
 
 /**
  *  Corresponding Class to test SearchQuery class
  *
  *  @author Richad Toth <riso@iklub.sk>
  */
-class SearchQueryTest extends PHPUnit_Framework_TestCase {
+final class SearchQueryTest extends TestCase {
 
   /**
    * Just check if the YourClass has no syntax error
    */
-  public function testIsThereAnySyntaxError() {
+  public function testIsThereAnySyntaxError(): void {
     $var = new Risototh\Database\SearchQuery;
     $this->assertTrue(is_object($var));
     unset($var);
   }
 
-  public function testTokenize1() {
+  public function testTokenize1(): void {
     $var1 = SearchQuery::tokenize('a AND NOT (b OR (c AND "d AND e")) AND (x OR y)');
     $var2 = [
       ['type' => 0, 'value' => 'a'],
@@ -44,7 +45,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     unset($var2);
   }
 
-  public function testTokenize2() {
+  public function testTokenize2(): void {
     $var1 = SearchQuery::tokenize('something or something else and also this or not ?');
     $var2 = [
       ['type' => 0, 'value' => 'something or something else and also this or not ?'],
@@ -54,7 +55,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     unset($var2);
   }
 
-  public function testFilter1() {
+  public function testFilter1(): void {
     $src = [
       ['type' => 1, 'value' => 'AND NOT'],
       ['type' => 0, 'value' => 'a'],
@@ -112,7 +113,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     unset($var2);
   }
 
-  public function testFilter2() {
+  public function testFilter2(): void {
     $src = [
       ['type' => 1, 'value' => 'AND'],
       ['type' => 1, 'value' => 'NOT'],
@@ -126,7 +127,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     unset($var2);
   }
 
-  public function testFilter3() {
+  public function testFilter3(): void {
     $src = [
       ['type' => 2, 'value' => [
         ['type' => 0, 'value' => 'x'],
@@ -155,7 +156,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     unset($var2);
   }
 
-  public function testFilter4() {
+  public function testFilter4(): void {
     $src = [
       ['type' => 0, 'value' => 'x'],
       ['type' => 0, 'value' => 'y'],
@@ -171,25 +172,25 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     unset($var2);
   }
 
-  public function testFilter5() {
+  public function testFilter5(): void {
     $this->assertEquals(SearchQuery::filter([]), []);
   }
 
-  public function testComposePart1() {
+  public function testComposePart1(): void {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::composePart('test\'"\xa0 something', $pdo, '`field`');
     $var2 = '`field` LIKE \'%test\'\'"\xa0 something%\'';
     $this->assertEquals($var1, $var2);
   }
 
-  public function testComposePart2() {
+  public function testComposePart2(): void {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::composePart('test\'"\xa0 something', $pdo, '`field` LIKE "%^FLT%"', '^FLT');
     $var2 = '`field` LIKE "%%test\'\'"\xa0 something%%"';
     $this->assertEquals($var1, $var2);
   }
 
-  public function testCompose1() {
+  public function testCompose1(): void {
     $pdo = $this->getConnection();
     $src = [
       ['type' => 1, 'value' => 'NOT'],
@@ -218,7 +219,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($var1, $var2);
   }
 
-  public function testCompose2() {
+  public function testCompose2(): void {
     $pdo = $this->getConnection();
     $src = [
       ['type' => 1, 'value' => 'NOT'],
@@ -247,21 +248,21 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($var1, $var2);
   }
 
-  public function testMake1() {
+  public function testMake1(): void {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::make('a AND NOT (b OR (c AND "d AND e")) AND (x OR y)', $pdo, '`field`');
     $var2 = '`field` LIKE \'%a%\' AND NOT (`field` LIKE \'%b%\' OR (`field` LIKE \'%c%\' AND `field` LIKE \'%d AND e%\')) AND (`field` LIKE \'%x%\' OR `field` LIKE \'%y%\')';
     $this->assertEquals($var1, $var2);
   }
 
-  public function testMake2() {
+  public function testMake2(): void {
     $pdo = $this->getConnection();
     $var1 = SearchQuery::make('a AND NOT (b OR (c AND "d AND e")) AND (x OR y)', $pdo, '`field` LIKE "%^FLT%"', '^FLT');
     $var2 = '`field` LIKE "%%a%%" AND NOT (`field` LIKE "%%b%%" OR (`field` LIKE "%%c%%" AND `field` LIKE "%%d AND e%%")) AND (`field` LIKE "%%x%%" OR `field` LIKE "%%y%%")';
     $this->assertEquals($var1, $var2);
   }
 
-  public function testReconstruct1() {
+  public function testReconstruct1(): void {
     $src = [
       ['type' => 1, 'value' => 'NOT'],
       ['type' => 0, 'value' => 'a'],
@@ -289,7 +290,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($var1, $var2);
   }
 
-  public function testReconstruct2() {
+  public function testReconstruct2(): void {
     $src = [
       ['type' => 0, 'value' => 'a'],
     ];
@@ -298,7 +299,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
     $this->assertEquals($var1, $var2);
   }
 
-  public function testForwardBackward() {
+  public function testForwardBackward(): void {
     $src = 'NOT a AND NOT (b OR (c AND "d AND e")) AND (x OR y AND NOT y)';
     $tokens = SearchQuery::tokenize($src);
     $result = SearchQuery::reconstruct($tokens);
@@ -308,7 +309,7 @@ class SearchQueryTest extends PHPUnit_Framework_TestCase {
   /**
    * @return \PDO
    */
-  public function getConnection() {
+  public function getConnection(): \PDO {
     return new \PDO('sqlite::memory:');
   }
 }
